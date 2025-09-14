@@ -1,5 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { secureGet } from "./utils/secureAxios";
+
+// Type definitions for API responses
+interface Post {
+  id: number;
+  title: string;
+  body: string;
+  userId: number;
+}
 
 const Posts = ({
   setPostId,
@@ -8,8 +16,8 @@ const Posts = ({
 }) => {
   const { data, status, error, isFetching } = useQuery({
     queryKey: ["posts"],
-    queryFn: async () => {
-      const { data } = await axios.get(
+    queryFn: async (): Promise<Post[]> => {
+      const { data } = await secureGet<Post[]>(
         "https://jsonplaceholder.typicode.com/posts"
       );
       return data;
@@ -28,11 +36,11 @@ const Posts = ({
     <div>
       <h1>ポスト一覧</h1>
       <div>
-        {status === "pending" ? (
+        {status === "success" ? (
           <>Loading...</>
         ) : (
           <>
-            {data.map((post: any) => (
+            {data && (data as Post[]).map((post: Post) => (
               <p key={post.id}>
                 <a href="#" onClick={() => setPostId(post.id)}>
                   {post.title}

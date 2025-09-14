@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Post from "./Post";
 import Posts from "./Posts";
+import SecurityTest from "./SecurityTest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
@@ -14,11 +15,17 @@ function App() {
   return (
     // QueryClientProviderでラップ
     <QueryClientProvider client={queryClient}>
-      {postId > -1 ? (
-        <Post postId={postId} setPostId={setPostId} />
-      ) : (
-        <Posts setPostId={setPostId} />
-      )}
+      <div>
+        {/* Security test component */}
+        <SecurityTest />
+        
+        {/* Original application */}
+        {postId > -1 ? (
+          <Post postId={postId} setPostId={setPostId} />
+        ) : (
+          <Posts setPostId={setPostId} />
+        )}
+      </div>
       {/* ReactQueryDevtoolsを追加 */}
       <ReactQueryDevtools />
     </QueryClientProvider>
